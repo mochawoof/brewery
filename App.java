@@ -6,6 +6,8 @@ import java.awt.event.*;
 import org.fife.ui.rtextarea.*;
 import org.fife.ui.rsyntaxtextarea.*;
 
+import java.util.function.IntConsumer;
+
 class App extends JFrame {
     private void setTheme(String theme) {
         try {
@@ -17,6 +19,20 @@ class App extends JFrame {
         }
     }
     
+    private void addFileTab(String filePath) {
+        RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        textArea.setCodeFoldingEnabled(true);
+        
+        RTextScrollPane pane = new RTextScrollPane(textArea);
+        pane.putClientProperty("JTabbedPane.tabClosable", true);
+        pane.putClientProperty("JTabbedPane.tabCloseCallback", (IntConsumer) tabIndex -> {
+            
+        });
+        
+        tabs.addTab(filePath, pane);
+    }
+    
     private JTabbedPane tabs;
     
     public App() {
@@ -25,6 +41,7 @@ class App extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setTheme("com.formdev.flatlaf.FlatLightLaf");
+        setIconImage(Resources.getAsImage("images/icon_128.png"));
         
         // Menu bar
         JMenuBar menuBar = new JMenuBar();
@@ -37,10 +54,8 @@ class App extends JFrame {
         tabs = new JTabbedPane();
         add(tabs, BorderLayout.CENTER);
         
-        JLabel label = new JLabel("Tabbb");
-        label.putClientProperty("JTabbedPane.tabClosable", true);
-        
-        tabs.addTab("Tab", label);
+        addFileTab("Main.java");
+        addFileTab("Frame.java");
 
         setVisible(true);
     }
