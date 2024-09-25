@@ -9,8 +9,6 @@ import org.fife.ui.rsyntaxtextarea.*;
 import java.util.function.IntConsumer;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 class App extends JFrame {
     private void setTheme(String theme) {
@@ -23,37 +21,26 @@ class App extends JFrame {
         }
     }
     
-    private String getMimeType(String filePath) {
-        String type = null;
-        try {
-            type = Files.probeContentType(Paths.get(filePath));
-        } catch (Exception e) {
-            System.err.println("Mime type probe failed for " + filePath);
-            e.printStackTrace();
-        }
-        if (type == null) {
-            type = "text/plain";
-        }
-        return type;
-    }
-    
     private void addFileTab(String filePath) {
         RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
-        textArea.setSyntaxEditingStyle(getMimeType(filePath));
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
         textArea.setCodeFoldingEnabled(true);
         
         RTextScrollPane pane = new RTextScrollPane(textArea);
-        pane.putClientProperty("JTabbedPane.tabClosable", true);
+        //pane.putClientProperty("JTabbedPane.tabClosable", true);
         pane.putClientProperty("JTabbedPane.tabCloseCallback", (IntConsumer) tabIndex -> {
             
         });
         
-        tabs.addTab(filePath, pane);
+        tabs.addTab(filePath, Resources.getAsImageIcon("images/code.png"), pane);
     }
     
+    private App thisApp;
     private JTabbedPane tabs;
     
     public App() {
+        thisApp = this;
+        
         setTitle("Brewery");
         setSize(700, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -65,14 +52,27 @@ class App extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         
-        JMenu projectMenu = new JMenu("Project");
-        menuBar.add(projectMenu);
+        JMenu folderMenu = new JMenu("Folder");
+        menuBar.add(folderMenu);
         
         JMenu fileMenu = new JMenu("File");
         menuBar.add(fileMenu);
         
+        menuBar.add(Box.createGlue());
+        JButton helpButton = new JButton(Resources.getAsImageIcon("images/help.png"));
+        helpButton.setBorderPainted(false);
+        
+        helpButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(thisApp, "Brewery " + Main.VERSION + "\nPlease visit https://github.com/mochawoof/brewery/issues to get help with Brewery.", "Brewery Help", JOptionPane.INFORMATION_MESSAGE, Resources.getAsImageIcon("images/icon_128.png"));
+            }
+        });
+        
+        menuBar.add(helpButton);
+        
         // Tabs
-        tabs = new JTabbedPane();
+        UIManager.put("TabbedPane.tabAlignment", "leading");
+        tabs = new JTabbedPane(JTabbedPane.LEFT);
         add(tabs, BorderLayout.CENTER);
         
         addFileTab("Main.java");
