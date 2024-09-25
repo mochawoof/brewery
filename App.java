@@ -37,7 +37,7 @@ class App extends JFrame {
     
     public App() {
         setTitle("Brewery");
-        setSize(600, 400);
+        setSize(700, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setTheme("com.formdev.flatlaf.FlatLightLaf");

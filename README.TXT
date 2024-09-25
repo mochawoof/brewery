@@ -1,1 +1,1 @@
-Brewery, the unopinionated Java IDE!
+Brewery, the unopinionated Java IDE.
