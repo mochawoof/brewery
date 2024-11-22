@@ -6,6 +6,8 @@ import java.util.HashMap;
 class Settings {
     public static Properties props;
     private static String filename = ".settings";
+    
+    // Settings with a . preceding their names will not be user-editable.
     public static HashMap<String, String[]> defaults = new HashMap<String, String[]>() {{
         put("Theme", new String[] {
             "com.formdev.flatlaf.FlatLightLaf",

@@ -48,7 +48,7 @@ class Main {
         JMenuItem rSettings = new JMenuItem("Reset Settings");
         rSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int opt = JOptionPane.showConfirmDialog(frame, "Are you sure you want to reset your settings? Brewery will restart after.", "Confirm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                int opt = JOptionPane.showConfirmDialog(frame, "Are you sure you want to reset all your settings? Brewery will have to restart.", "Confirm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (opt == JOptionPane.OK_OPTION) {
                     Settings.reset();
                     restart();
