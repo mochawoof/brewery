@@ -72,9 +72,18 @@ class Main {
         });
         hm.add(hAbout);
         
+        // terminal pane
+        JSplitPane tpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        frame.add(tpane, BorderLayout.CENTER);
+        tpane.setDividerLocation(200);
+        
+        Terminal term = new Terminal();
+        term.setText("Welcome to Brewery!");
+        tpane.setBottomComponent(term);
+        
         // pane
         JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        frame.add(pane, BorderLayout.CENTER);
+        tpane.setTopComponent(pane);
         pane.setDividerLocation(150);
         
         UIManager.put("ToolBar.floatable", true);
