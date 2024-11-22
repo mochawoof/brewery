@@ -48,10 +48,10 @@ class Main {
         JMenuItem rSettings = new JMenuItem("Reset Settings");
         rSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int opt = JOptionPane.showConfirmDialog(frame, "Are you sure you want to reset your settings? Brewery will close after.", "Confirm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                int opt = JOptionPane.showConfirmDialog(frame, "Are you sure you want to reset your settings? Brewery will restart after.", "Confirm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (opt == JOptionPane.OK_OPTION) {
                     Settings.reset();
-                    System.exit(0);
+                    restart();
                 }
             }
         });
@@ -106,6 +106,11 @@ class Main {
         frame.setVisible(true);
     }
     
+    private static void restart() {
+        frame.dispose();
+        main(new String[] {});
+    }
+    
     private static void editSettings() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 2));
@@ -139,9 +144,9 @@ class Main {
                 Settings.set(e.getKey().replace(" ", "_"), (String) e.getValue().getSelectedItem());
             }
             
-            int restartOpt = JOptionPane.showConfirmDialog(frame, "Brewery must restart to apply your changes. Close now?", "Confirm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            int restartOpt = JOptionPane.showConfirmDialog(frame, "Brewery must restart to apply your changes. Restart now?", "Confirm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (restartOpt == JOptionPane.OK_OPTION) {
-                System.exit(0);
+                restart();
             }
         }
     }
