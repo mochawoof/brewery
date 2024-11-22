@@ -10,12 +10,14 @@ import java.util.Enumeration;
 
 class Main {
     public static final String VERSION = "1";
+    public static String openFolder = "";
     
     public static JFrame frame;
     public static void main(String[] args) {
         Settings.init();
         
         // Load theme
+        JFrame.setDefaultLookAndFeelDecorated(true);
         try {
             UIManager.setLookAndFeel(Settings.get("Theme"));
         } catch (Exception e) {
@@ -48,7 +50,7 @@ class Main {
         JMenuItem rSettings = new JMenuItem("Reset Settings");
         rSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int opt = JOptionPane.showConfirmDialog(frame, "Are you sure you want to reset all your settings? Brewery will have to restart.", "Confirm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                int opt = JOptionPane.showConfirmDialog(frame, "Are you sure you want to reset all your settings? Brewery will restart afterwards.", "Confirm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (opt == JOptionPane.OK_OPTION) {
                     Settings.reset();
                     restart();
