@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,11 +9,20 @@ import org.fife.ui.rsyntaxtextarea.*;
 import java.util.HashMap;
 import java.util.Enumeration;
 
+import java.io.File;
+import java.nio.file.*;
+
 class Main {
+    // Keep in mind that any variables here that are not set in the constructor will persist between restarts
     public static final String VERSION = "1";
-    public static String openFolder = "";
+    public static String openFolder = "./";
     
     public static JFrame frame;
+    public static JTree fileTree;
+    public static JSplitPane tpane;
+    public static JSplitPane pane;
+    public static JTabbedPane tabs;
+    
     public static void main(String[] args) {
         Settings.init();
         
@@ -35,8 +45,20 @@ class Main {
         
         JMenu fm = new JMenu("File");
         menuBar.add(fm);
-        JMenuItem fOpen = new JMenuItem("Open");
+        JMenuItem fOpen = new JMenuItem("Open...");
+        fOpen.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                openFolder();
+            }
+        });
         fm.add(fOpen);
+        JMenuItem fRefresh = new JMenuItem("Refresh");
+        fRefresh.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                refreshFileTree();
+            }
+        });
+        fm.add(fRefresh);
         
         JMenu editm = new JMenu("Edit");
         menuBar.add(editm);
@@ -73,16 +95,16 @@ class Main {
         hm.add(hAbout);
         
         // terminal pane
-        JSplitPane tpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        tpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         frame.add(tpane, BorderLayout.CENTER);
-        tpane.setDividerLocation(200);
+        tpane.setDividerLocation(230);
         
         Terminal term = new Terminal();
         term.setText("Welcome to Brewery!");
         tpane.setBottomComponent(term);
         
         // pane
-        JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         tpane.setTopComponent(pane);
         pane.setDividerLocation(150);
         
@@ -94,13 +116,11 @@ class Main {
         frame.add(toolBar, BorderLayout.PAGE_END);
         
         UIManager.put("Tree.showDefaultIcons", true);
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("C:\\Users\\4804095191\\");
-        root.add(new DefaultMutableTreeNode("fag.txt"));
+        refreshFileTree();
         
-        JTree fileTree = new JTree(root);
-        pane.setLeftComponent(new JScrollPane(fileTree));
-        
-        RSyntaxTextArea ta = new RSyntaxTextArea();
+        tabs = new JTabbedPane();
+        pane.setRightComponent(tabs);
+        /*RSyntaxTextArea ta = new RSyntaxTextArea();
                 
         // Load theme for RSyntaxTextArea
         if (Settings.get("Editor_Theme").equals("Dark")) {
@@ -112,9 +132,86 @@ class Main {
         }
         
         ta.setCodeFoldingEnabled(true);
-        pane.setRightComponent(new JScrollPane(ta));
+        pane.setRightComponent(new JScrollPane(ta));*/
         
         frame.setVisible(true);
+    }
+    
+    private static void addTab(Path p) {        
+        File f = new File(p.toUri());
+        if (f.exists() && f.isFile() && f.canRead()) {
+            RSyntaxTextArea ta = new RSyntaxTextArea();
+            
+            // Load theme for RSyntaxTextArea
+            if (Settings.get("Editor_Theme").equals("Dark")) {
+                try {
+                    Theme.load(Resources.getAsStream("org/fife/ui/rsyntaxtextarea/themes/dark.xml")).apply(ta);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            
+            ta.setCodeFoldingEnabled(true);
+            
+            tabs.addTab(Paths.get(openFolder).toAbsolutePath().relativize(p.toAbsolutePath()).toString(), new JScrollPane(ta));
+        }
+    }
+    
+    private static void openFolder() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int opt = chooser.showOpenDialog(frame);
+        if (opt == JFileChooser.APPROVE_OPTION) {
+            openFolder = chooser.getSelectedFile().getAbsolutePath();
+            refreshFileTree();
+        }
+    }
+    
+    private static Path putTogetherPath(Object[] path) {
+        Path p = Paths.get((String) path[0]);
+        p = p.normalize();
+        for (int i = 1; i < path.length; i++) {
+            Object o = path[i];
+            p = p.resolve((String) o);
+        }
+        return p;
+    }
+    
+    private static void addToFileTree(File f, DefaultMutableTreeNode parent) {
+        DefaultMutableTreeNode node = new DefaultMutableTreeNode(f.getName());
+        if (parent != null) {
+            parent.add(node);
+        } else {
+            fileTree = null;
+            node.setUserObject(f.getAbsolutePath());
+            fileTree = new JTree(node);
+            fileTree.setEditable(false);
+            fileTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+            fileTree.addTreeSelectionListener(new TreeSelectionListener() {
+                public void valueChanged(TreeSelectionEvent e) {
+                    // Put file path back together
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
+                    Object[] path = node.getUserObjectPath();
+                    addTab(putTogetherPath(path));
+                }
+            });
+            pane.setLeftComponent(new JScrollPane(fileTree));
+        }
+        
+        if (f.isDirectory() && f.canRead()) {
+            for (File fs : f.listFiles()) {
+                addToFileTree(fs, node);
+            }
+        }
+    }
+    
+    private static void refreshFileTree() {
+        fileTree = null;
+        
+        File openFolderf = new File(openFolder);
+        if (openFolderf.exists() && openFolderf.isDirectory() && openFolderf.canRead()) {
+            addToFileTree(openFolderf, null);
+        }
     }
     
     private static void restart() {

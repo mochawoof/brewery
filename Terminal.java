@@ -6,5 +6,6 @@ class Terminal extends RTextArea {
         setBackground(Color.BLACK);
         setForeground(Color.WHITE);
         setCurrentLineHighlightColor(Color.BLACK);
+        setEditable(false);
     }
 }
