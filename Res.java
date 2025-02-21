@@ -1,3 +1,4 @@
+// v1.1
 import java.net.URL;
 
 import javax.swing.ImageIcon;
@@ -5,9 +6,9 @@ import java.awt.Image;
 
 import java.io.InputStream;
 
-class Resources {
+class Res {
     public static URL get(String path) {
-        return Resources.class.getResource(path);
+        return Res.class.getResource(path);
     }
     public static ImageIcon getAsImageIcon(String path) {
         return new ImageIcon(get(path));
@@ -16,7 +17,7 @@ class Resources {
         return getAsImageIcon(path).getImage();
     }
     public static InputStream getAsStream(String path) {
-        return Resources.class.getResourceAsStream(path);
+        return Res.class.getResourceAsStream(path);
     }
     public static String getAsString(String path) {
         InputStream stream = getAsStream(path);
@@ -27,9 +28,8 @@ class Resources {
                 str += (char) i;
             }
         } catch (Exception e) {
-            System.err.println("IO error while reading resource as string!");
             e.printStackTrace();
-            str = "ERROR";
+            str = null;
         }
         return str;
     }
