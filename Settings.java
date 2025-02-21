@@ -183,15 +183,21 @@ class Settings {
         
         // TODO implement mustbeconfirmed, return correct opt value
         if (opt == OK) {
-            for (HashMap.Entry<String, JComboBox> e : boxes.entrySet()) {
-                set(e.getKey().replace(" ", "_"), (String) e.getValue().getSelectedItem());
+            if ((mustbeconfirmed ? confirm() : true)) {
+                for (HashMap.Entry<String, JComboBox> e : boxes.entrySet()) {
+                    set(e.getKey().replace(" ", "_"), (String) e.getValue().getSelectedItem());
+                }
+            } else {
+                opt = CANCEL;
             }
         } else if (opt == RESET) {
-            if (!mustbeconfirmed) {
-                if (JOptionPane.showConfirmDialog(parent, "Are you sure you want to reset all settings?", "Warning", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
-                    reset();
-                }
+            if (JOptionPane.showConfirmDialog(parent, "Are you sure you want to reset all settings?", "Warning", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+                reset();
+            } else {
+                opt = CANCEL;
             }
+        } else {
+            opt = CANCEL;
         }
         
         return opt;
