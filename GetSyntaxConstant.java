@@ -35,6 +35,14 @@ class getSyntaxConstant {
         put("makefile", SyntaxConstants.SYNTAX_STYLE_MAKEFILE);
         put("md", SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
         put("mxml", SyntaxConstants.SYNTAX_STYLE_MXML);
+        put("nsis,nsi", SyntaxConstants.SYNTAX_STYLE_NSIS);
+        put("perl", SyntaxConstants.SYNTAX_STYLE_PERL);
+        put("php", SyntaxConstants.SYNTAX_STYLE_PHP);
+        put("proto", SyntaxConstants.SYNTAX_STYLE_PROTO);
+        put("properties", SyntaxConstants.SYNTAX_STYLE_PROPERTIES_FILE);
+        put("py", SyntaxConstants.SYNTAX_STYLE_PYTHON);
+        put("rb", SyntaxConstants.SYNTAX_STYLE_RUBY);
+        put("rs", SyntaxConstants.SYNTAX_STYLE_RUST);
         
     }};
     public static String get(String extension) {
