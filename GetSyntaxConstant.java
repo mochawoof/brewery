@@ -3,16 +3,39 @@ import java.util.HashMap;
 
 class getSyntaxConstant {
     public static HashMap<String, String> mappings = new HashMap<String, String>() {{
-        put("java", SyntaxConstants.SYNTAX_STYLE_JAVA);
-        put("properties", SyntaxConstants.SYNTAX_STYLE_PROPERTIES_FILE);
+        put("as", SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT);
+        put("asm", SyntaxConstants.SYNTAX_STYLE_ASSEMBLER_X86);
+        put("c", SyntaxConstants.SYNTAX_STYLE_C);
+        put("clj", SyntaxConstants.SYNTAX_STYLE_CLOJURE);
+        put("cpp", SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+        put("cs", SyntaxConstants.SYNTAX_STYLE_CSHARP);
         put("css", SyntaxConstants.SYNTAX_STYLE_CSS);
         put("csv", SyntaxConstants.SYNTAX_STYLE_CSV);
+        put("d", SyntaxConstants.SYNTAX_STYLE_D);
         put("dockerfile", SyntaxConstants.SYNTAX_STYLE_DOCKERFILE);
+        put("dart", SyntaxConstants.SYNTAX_STYLE_DART);
+        put("pas", SyntaxConstants.SYNTAX_STYLE_DELPHI);
+        put("dtd", SyntaxConstants.SYNTAX_STYLE_DTD);
+        put("for,f90", SyntaxConstants.SYNTAX_STYLE_FORTRAN);
+        put("go", SyntaxConstants.SYNTAX_STYLE_GO);
+        put("groovy", SyntaxConstants.SYNTAX_STYLE_GROOVY);
+        put("htaccess", SyntaxConstants.SYNTAX_STYLE_HTACCESS);
+        put("html,htm", SyntaxConstants.SYNTAX_STYLE_HTML);
+        put("ini", SyntaxConstants.SYNTAX_STYLE_INI);
+        put("java", SyntaxConstants.SYNTAX_STYLE_JAVA);
+        put("js", SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         put("json", SyntaxConstants.SYNTAX_STYLE_JSON);
+        put("jshinitrc", SyntaxConstants.SYNTAX_STYLE_JSON_WITH_COMMENTS);
+        put("jsp", SyntaxConstants.SYNTAX_STYLE_JSP);
+        put("kt,ktm,kts", SyntaxConstants.SYNTAX_STYLE_KOTLIN);
+        put("tex", SyntaxConstants.SYNTAX_STYLE_LATEX);
+        put("less", SyntaxConstants.SYNTAX_STYLE_LESS);
+        put("lisp", SyntaxConstants.SYNTAX_STYLE_LISP);
+        put("lua", SyntaxConstants.SYNTAX_STYLE_LUA);
+        put("makefile", SyntaxConstants.SYNTAX_STYLE_MAKEFILE);
         put("md", SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
-        put("sh", SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL);
-        put("bat", SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL);
-        put("yaml", SyntaxConstants.SYNTAX_STYLE_YAML);
+        put("mxml", SyntaxConstants.SYNTAX_STYLE_MXML);
+        
     }};
     public static String get(String extension) {
         String got = mappings.get(extension);
