@@ -31,7 +31,7 @@ class Settings {
     }};
 
     private static void update() {
-        Main.update();
+        //Main.update();
     }
     
     private static boolean confirm() {
