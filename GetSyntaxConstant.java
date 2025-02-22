@@ -1,5 +1,6 @@
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import java.util.HashMap;
+import java.util.Map;
 
 class getSyntaxConstant {
     public static HashMap<String, String> mappings = new HashMap<String, String>() {{
@@ -43,14 +44,27 @@ class getSyntaxConstant {
         put("py", SyntaxConstants.SYNTAX_STYLE_PYTHON);
         put("rb", SyntaxConstants.SYNTAX_STYLE_RUBY);
         put("rs", SyntaxConstants.SYNTAX_STYLE_RUST);
-        
+        put("sas", SyntaxConstants.SYNTAX_STYLE_SAS);
+        put("scala,sc", SyntaxConstants.SYNTAX_STYLE_SCALA);
+        put("sql", SyntaxConstants.SYNTAX_STYLE_SQL);
+        put("tcl", SyntaxConstants.SYNTAX_STYLE_TCL);
+        put("ts", SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT);
+        put("sh", SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL);
+        put("vb", SyntaxConstants.SYNTAX_STYLE_VISUAL_BASIC);
+        put("bat,cmd", SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH);
+        put("xml", SyntaxConstants.SYNTAX_STYLE_XML);
+        put("yaml,yml", SyntaxConstants.SYNTAX_STYLE_YAML);
     }};
     public static String get(String extension) {
-        String got = mappings.get(extension);
-	if (got != null) {
-		return got;
-	} else {
-		return SyntaxConstants.SYNTAX_STYLE_NONE;
-	}
+        for (Map.Entry<String, String> e : mappings.entrySet()) {
+            String[] exts = e.getKey().split(",");
+            for (String s : exts) {
+                if (s.equals(extension)) {
+                    return e.getValue();
+                }
+            }
+        }
+        
+        return SyntaxConstants.SYNTAX_STYLE_NONE;
     }
 }

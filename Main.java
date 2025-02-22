@@ -3,9 +3,13 @@ import java.awt.event.*;
 import java.awt.*;
 
 import org.fife.ui.rsyntaxtextarea.*;
+import javax.swing.tree.*;
+import java.io.File;
 
 class Main {
     private static JFrame f;
+    private static DefaultMutableTreeNode ftreeroot;
+    private static File openfolder;
     
     public static void update() {
         try {
@@ -75,8 +79,9 @@ class Main {
         JSplitPane filesplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         filesplit.setDividerLocation(150);
         f.add(filesplit, BorderLayout.CENTER);
-            JTree filetree = new JTree();
-            filesplit.setLeftComponent(filetree);
+            ftreeroot = new DefaultMutableTreeNode("");
+            JTree ftree = new JTree(ftreeroot);
+            filesplit.setLeftComponent(ftree);
         
         JSplitPane termsplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         termsplit.setDividerLocation(300);
