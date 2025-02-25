@@ -11,6 +11,7 @@ class Main {
     private static JFrame f;
     private static DefaultMutableTreeNode ftreeroot;
     private static JTree ftree;
+    private static JTabbedPaneCloseButton tabs;
     
     private static boolean loadfiles(DefaultMutableTreeNode folder, boolean top) {
         File file = (File) folder.getUserObject();
@@ -19,6 +20,9 @@ class Main {
             File[] files = file.listFiles();
             for (File fl : files) {
                 DefaultMutableTreeNode node = new DefaultMutableTreeNode(fl);
+                
+                JPopupMenu cmenu = new JPopupMenu();
+                
                 folder.add(node);
                 
                 if (fl.isDirectory() && top) {
@@ -27,6 +31,7 @@ class Main {
             }
             
             if (files.length == 0) {
+                folder.add(new DefaultMutableTreeNode(new File("C:\\Empty")));
                 return false;
             }
         } else {
@@ -75,6 +80,22 @@ class Main {
         }
         f.setVisible(true);
     }
+    
+    private static void addTab(File fl) {
+        RSyntaxTextArea textarea = new RSyntaxTextArea();
+        textarea.setCodeFoldingEnabled(true);
+        
+        String name = "New";
+        if (fl != null && fl.exists()) {
+            name = fl.getName();
+            String[] nameplusext = fl.getName().split(".");
+            String ext = nameplusext[nameplusext.length - 1];
+            textarea.setSyntaxEditingStyle(GetSyntaxConstant.get(ext));
+        }
+        
+        tabs.addTab(name, new JScrollPane(textarea));
+    }
+    
     public static void main(String[] args) {
         f = new JFrame("Brewery");
         f.setSize(800, 500);
@@ -129,13 +150,24 @@ class Main {
                         return super.getTreeCellRendererComponent(tree, v, sel, expanded, leaf, row, hasFocus);
                     }
                 });
+                ftree.addTreeWillExpandListener(new TreeWillExpandListener() {
+                    public void treeWillCollapse(TreeExpansionEvent e) {
+                        DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+                        //node.removeAllChildren();
+                    }
+                    public void treeWillExpand(TreeExpansionEvent e) {
+                        DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+                        loadfiles(node, true);
+                    }
+                });
             filesplit.setLeftComponent(new JScrollPane(ftree));
         
         JSplitPane termsplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
         termsplit.setDividerLocation(300);
         filesplit.setBottomComponent(termsplit);
-            RSyntaxTextArea textarea = new RSyntaxTextArea();
-            termsplit.setTopComponent(new JScrollPane(textarea));
+            tabs = new JTabbedPaneCloseButton();
+            addTab(null);
+            termsplit.setTopComponent(tabs);
             
             RSyntaxTextArea termtextarea = new RSyntaxTextArea();
             termtextarea.setBackground(Color.BLACK);

@@ -2,7 +2,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import java.util.HashMap;
 import java.util.Map;
 
-class getSyntaxConstant {
+class GetSyntaxConstant {
     public static HashMap<String, String> mappings = new HashMap<String, String>() {{
         put("as", SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT);
         put("asm", SyntaxConstants.SYNTAX_STYLE_ASSEMBLER_X86);
